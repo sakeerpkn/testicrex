@@ -83,7 +83,7 @@ def test(request):
 
 def api_render_to_pdf(response,template_src):
     result = StringIO.StringIO()
-    pdf = pisa.pisaDocument(StringIO.StringIO(template_src.encode('utf-8') ),  dest=result )
+    pdf = pisa.pisaDocument(StringIO.StringIO(template_src),  dest=result, encoding='utf-8' )
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     else:
@@ -103,13 +103,9 @@ def icrex_pdf_api(request):
     response['message'] = 'Failed'
     try:
         if 'html' in request.body:
-            print "yes"
             data = ast.literal_eval(request.body)
-            data = json.loads(data)
-            print "typeee", type(data)
             html = data['html']
 
-            print "html==", html
             return api_render_to_pdf(
                 response,
                 html,
