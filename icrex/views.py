@@ -82,9 +82,8 @@ def test(request):
 
 
 def api_render_to_pdf(response,template_src):
-    html = template_src
     result = StringIO.StringIO()
-    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode('utf-8') ),  dest=result)
+    pdf = pisa.pisaDocument(StringIO.StringIO(template_src.encode('utf-8') ),  dest=result )
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     else:
@@ -95,15 +94,22 @@ def api_render_to_pdf(response,template_src):
 @csrf_exempt
 def icrex_pdf_api(request):
     # request_data = request.body.decode('utf-8')
+    import ast
+    import json
+
     results = []
     response = {}
     response['status_code'] = 500
     response['message'] = 'Failed'
     try:
         if 'html' in request.body:
-            import ast
+            print "yes"
             data = ast.literal_eval(request.body)
+            data = json.loads(data)
+            print "typeee", type(data)
             html = data['html']
+
+            print "html==", html
             return api_render_to_pdf(
                 response,
                 html,
