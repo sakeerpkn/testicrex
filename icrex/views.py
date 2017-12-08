@@ -30,6 +30,7 @@ def web_render_to_pdf(template_src,context_dict):
 
 
 def icrex_pdf_1(request):
+    print "===================================================================11"
     results = []
     html = 'pdf_template-1.html'
     return web_render_to_pdf(
@@ -41,6 +42,7 @@ def icrex_pdf_1(request):
         )
 
 def icrex_pdf_2(request):
+    print "===================================================================22"
     results = []
     html = 'pdf_template-2.html'
     return web_render_to_pdf(
@@ -52,6 +54,7 @@ def icrex_pdf_2(request):
         )
 
 def icrex_pdf_3(request):
+    print "===================================================================33"
     results = []
     html = 'pdf_template-3.html'
     return web_render_to_pdf(
@@ -63,6 +66,7 @@ def icrex_pdf_3(request):
         )
 
 def icrex_pdf_4(request):
+    print "===================================================================44"
     results = []
     html = 'pdf_template-4.html'
     return web_render_to_pdf(
@@ -74,6 +78,7 @@ def icrex_pdf_4(request):
         )
 
 def icrex_pdf_5(request):
+    print "===================================================================55"
     results = []
     html = 'pdf_template-5.html'
     return web_render_to_pdf(
@@ -85,6 +90,8 @@ def icrex_pdf_5(request):
         )
 
 def icrex_pdf_6(request):
+
+    print "===================================================================66"
     results = []
     html = 'pdf_template-6.html'
     return web_render_to_pdf(
@@ -96,6 +103,8 @@ def icrex_pdf_6(request):
         )
 
 def icrex_pdf_7(request):
+    print "===================================================================77"
+
     results = []
     html = 'pdf_template-7.html'
     return web_render_to_pdf(
@@ -107,6 +116,7 @@ def icrex_pdf_7(request):
         )
 
 def icrex_pdf_8(request):
+    print "===================================================================88"
     results = []
     html = 'pdf_template-8.html'
     return web_render_to_pdf(
