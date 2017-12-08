@@ -73,6 +73,49 @@ def icrex_pdf_4(request):
             }
         )
 
+def icrex_pdf_5(request):
+    results = []
+    html = 'pdf_template-5.html'
+    return web_render_to_pdf(
+            html,
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
+
+def icrex_pdf_6(request):
+    results = []
+    html = 'pdf_template-6.html'
+    return web_render_to_pdf(
+            html,
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
+
+def icrex_pdf_7(request):
+    results = []
+    html = 'pdf_template-7.html'
+    return web_render_to_pdf(
+            html,
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
+
+def icrex_pdf_8(request):
+    results = []
+    html = 'pdf_template-8.html'
+    return web_render_to_pdf(
+            html,
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
 def test(request):
     from django.shortcuts import render
 
