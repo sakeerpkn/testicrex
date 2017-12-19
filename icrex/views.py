@@ -8,7 +8,8 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 import json
-
+import ast
+import uuid
 
 def fetch_resources(uri, rel):
     path = os.path.join(settings.STATIC_URL, uri.replace(settings.STATIC_URL, ""))
@@ -27,6 +28,9 @@ def web_render_to_pdf(template_src,context_dict):
     else:
         response['message'] = 'Failed: '+str(pdf.err)+' '
     return HttpResponse(json.dumps(response), content_type="application/json")
+
+
+
 
 
 def icrex_pdf_1(request):
@@ -126,6 +130,21 @@ def icrex_pdf_8(request):
                 'mylist': results,
             }
         )
+
+
+
+def icrex_pdf_9(request):
+    print "===================================================================99 original"
+    results = []
+    html = 'original1.html'
+    return web_render_to_pdf(
+            html,
+            {
+                'pagesize':'A4',
+                'mylist': results,
+            }
+        )
+
 def test(request):
     from django.shortcuts import render
 
@@ -153,8 +172,7 @@ def api_render_to_single_pdf(response,template_src):
 @csrf_exempt
 def icrex_pdf_api(request):
     print "===================================================================api single"
-    import ast
-    import json
+    
 
     results = []
     response = {}
@@ -179,6 +197,65 @@ def icrex_pdf_api(request):
     return HttpResponse(json.dumps(response), content_type="application/json")
 
 
+
+
+
+@csrf_exempt
+def icrex_pdf_add_footer_api(request):
+    print "===================================================================api single"
+
+    results = []
+    response = {}
+    response['status_code'] = 500
+    response['message'] = 'Failed'
+    try:
+        if 'html' in request.body:
+            data = ast.literal_eval(request.body)
+            html = data['html']
+            filename = str(uuid.uuid4())
+            result = open('templates/pdfs/'+str(filename), "w+b")
+            pdf = pisa.CreatePDF(StringIO.StringIO(html),  dest=result, encoding='utf-8' )
+            if not pdf.err:
+                print "no error"
+                #move to the beginning of the StringIO buffer
+
+                from pyPdf import PdfFileWriter, PdfFileReader
+                from reportlab.pdfgen import canvas
+                from reportlab.lib.pagesizes import letter
+
+                packet = StringIO.StringIO()
+                packet.seek(0)
+                new_pdf = PdfFileReader(packet)
+                print "newdppfff", new_pdf
+                # read your existing PDF
+                existing_pdf = PdfFileReader(file('templates/pdfs/'+str(filename), "rb"))
+                print "---------------",existing_pdf.getNumPages()
+                # output = PdfFileWriter()
+                # # add the "watermark" (which is the new pdf) on the existing page
+                # page = existing_pdf.getPage(0)
+                # page.mergePage(new_pdf.getPage(0))
+                # output.addPage(page)
+                # # finally, write "output" to a real file
+                # outputStream = file("destination.pdf", "wb")
+                # output.write(outputStream)
+                # outputStream.close()
+
+
+               
+            else:
+                print "its error"
+                response['message'] = 'Failed: '+str(pdf.err)+' '
+        else:
+            response['message'] = 'Missing arguments in json data'
+            print "noooooooo"
+    except Exception as e:
+        print "Exception===", e
+        response['message'] = 'Failed: '+str(e)+' '
+    print "response", response
+    return HttpResponse(json.dumps(response), content_type="application/json")
+
+
+
 def delete_all_existing_files():
     import os, shutil
     folder = 'templates/pdfs/'
@@ -192,7 +269,7 @@ def delete_all_existing_files():
             print(e)
 
 def api_render_to_multiple_pdf(response,template_src,pdf_array):
-    import uuid
+    
     filename = str(uuid.uuid4())
     result = open('templates/pdfs/'+str(filename), "w+b")
     pdf = pisa.CreatePDF(StringIO.StringIO(template_src),  dest=result, encoding='utf-8' )
@@ -207,8 +284,6 @@ def api_render_to_multiple_pdf(response,template_src,pdf_array):
 @csrf_exempt
 def icrex_multiple_pdf_api(request):
     print "===================================================================api multiple"
-    import ast
-    import json
     pdf_array = []
     results = []
     response = {}
